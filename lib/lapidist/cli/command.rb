@@ -1,4 +1,4 @@
-require_relative "../../tool"
+require_relative "../../lapidist"
 
 module Lapidist
   module Cli

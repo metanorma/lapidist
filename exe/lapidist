@@ -48,7 +48,7 @@ def common_opts(opts, options)
   end
 end
 
-subcommands = { 
+subcommands = {
   'start' => OptionParser.new do |opts|
     opts.banner = "Usage: ci-master sync [options]"
 
@@ -61,6 +61,7 @@ subcommands = {
       options[:gems] = gems
     end
   end,
+
   'rake' => OptionParser.new do |opts|
     opts.banner = "Usage: ci-master rake [options]"
 
@@ -70,6 +71,7 @@ subcommands = {
       options[:branch] = branch
     end
   end,
+
   'finish' => OptionParser.new do |opts|
     opts.banner = "Usage: ci-master bump [options]"
 
@@ -79,6 +81,7 @@ subcommands = {
       options[:branch] = branch
     end
   end,
+
   'release' => OptionParser.new do |opts|
     opts.banner = "Usage: ci-master do [options]"
 
