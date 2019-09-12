@@ -1,33 +1,114 @@
 = Lapidist: synchronized gem releases
 
-TODO.
+== Scope
+
+Certain projects are dependent on the interoperability of a web of gems.
+Changes to dependent gems, especially ones closer to the root, can cause
+many of the downstream gems to need upgrading.
+
+For example, a release of Metanorma spans over 50 gems. Changes to
+an underlying gem like https://github.com/metanorma/metanorma[`metanorma`]
+will require all downstream gems to re-run all tests.
+
+This software is created to simplify the release procedure of dependent
+gems. It provides methods to:
+
+* Define this dependent web of gems
+* Synchronized gem testing among this dependent web of gems
+* Synchronized release of these gems (with version increments)
+
+
+== Terms and definitions
+
+leaf gem:: a gem that is no other software is dependent on
+dependent gem:: a gem that other gems depend on
+root gem:: a gem that does not depend on any other gem in the defined gem web
+gem net:: a coherent set of gems that needs to interoperate and that requires synchronized releasing
+caught gem:: gem under the release control of the releaser
+release repository:: git repository or directory used for the releasing process
+
+== Features
+
+. Integration testing
+** all downstream gems can test against the work-in-progress upstream gems
+** management of `Gemfile` and `gemspec` version control
+
+. Release process
+** automatic version bumps for gems
+** synchronized pushes of feature branches across gems
+** creation of PRs across gems
+** synchronized release of gems
+
+
+== Usage
+
+=== Flow
+
+This is a "`composite-git-flow`" kind of process.
+Maybe it's called `git gush` or `git cascade`.
+
+The typical scenario is:
+
+. A leaf gem needs enhancing
+
+. A leaf gem requires a dependent gem to be updated
+
+. A dependent gem update means the testing on all its downstream gems needs to be updated
+
+This is how the release flow looks like.
+
+
+
+=== Create a repository with all gem sources
+
+For example, the https://github.com/metanorma/metanorma-release[`metanorma-release` repository]
+is a Lapidist-compatible release repository.
+
+It contains the source code for all gems in the Metanorma "`gem net`",
+each separated into its own directory at the root-level.
+
+
+=== Updating code and integrated testing
+
+. Go to the release repository
+
+. Run a command to create feature branches in all gems. (TODO: what is the command?)
+
+. Do the necessary work in the gem source code directory. (e.g. `isodoc` and `metanorma-iso`)
+
+. Run a script that performs tests on all the gems at once using the newly created feature branches (TODO: what is the command?)
+
+.. (alt) if you want Travis to test for you, push the release repository, and Travis will build for you. (assuming the release repository is git managed and/or submoduled, like `metanorma-release`)
+
+. When all the gems pass, run a script to make PRs to every repository. (TODO: what is the command?)
+
+.. If the feature branch for a gem is empty, the script will ignore it.
+
+. Merge PRs by hand or by script (into master or a release branch) (TODO: what is the command?)
+
+
+=== Releasing
+
+. When a release branch is ready (for all gems), run a script to: (TODO: what is the command?)
+.. Bump version of those gems (`VERSION` variable in code)
+.. Update the ``Gemfile``s (remove feature branches)
+.. Update ``gemspec``s to lock versions
+
+. Issue PRs for those gems to merge their release branches into `master`. (TODO: what is the command?)
+
+. Merge the release PRs by hand or by script. (TODO: what is the command?)
+
+Ideally, we want to update the base gems first, then the immediately dependent gems, and so forth to ensure that the builds always pass.
+
+
 
 == Installation
-
-Add this line to your application's Gemfile:
-
-[source,ruby]
-----
-gem 'lapidist'
-----
-
-And then execute:
-
-[source,sh]
-----
-$ bundle
-----
-
-Or install it yourself as:
 
 [source,sh]
 ----
 $ gem install lapidist
 ----
 
-== Usage
-
-TODO: Write usage instructions here
 
 == Development
 
