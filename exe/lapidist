@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'optparse'
+
+require_relative '../lib/lapidist/cli/command'
+
+options = {
+  dry_run: false,
+  verbose: false,
+  silent: false,
+  branch: nil,
+  gems: nil,
+  gems_path: Dir.pwd
+}
+
+command_name = 'lapidist'
+top_help = <<HELP
+List of supported sub-scommands:
+   start :     create branch for listed gems
+   test  :     run test for all gems in branch
+   bump  :     increment version
+   do    :     do release changed gems
+See '#{command_name} SUB-COMMAND --help' for more information on a specific command.
+HELP
+
+global = OptionParser.new do |opts|
+  opts.banner = "Usage: #{command_name} [options] [sub-command [options]]"
+  opts.separator ''
+  opts.separator top_help
+end
+
+def common_opts(opts, options)
+  opts.on("--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+
+  opts.on("-d", "--[no-]dry-run", "Dry-run don't modify anything") do |v|
+    options[:dry_run] = v
+  end
+
+  opts.on("-p", "--gems-path=PATH", String, "Gem path") do |path|
+    options[:gems_path] = File.expand_path(path)
+  end
+
+  opts.on("-s", "--silent", "Accept all interactive dialogs") do |v|
+    options[:silent] = v
+  end
+end
+
+subcommands = { 
+  'start' => OptionParser.new do |opts|
+    opts.banner = "Usage: ci-master sync [options]"
+
+    common_opts opts, options
+
+    opts.on("-bBRANCH", "--branch=BRANCH", String, "Branch to create") do |branch|
+      options[:branch] = branch
+    end
+    opts.on("-gGEMS_TMPL1,GEMS_TMPL2,GEMS_TMPLX", "--gems=GEMS_TMPL1,GEMS_TMPL2,GEMS_TMPLX", Array, "Gems to include in feature") do |gems|
+      options[:gems] = gems
+    end
+  end,
+  'rake' => OptionParser.new do |opts|
+    opts.banner = "Usage: ci-master rake [options]"
+
+    common_opts opts, options
+
+    opts.on("-bBRANCH", "--branch=BRANCH", String, "Branch to test") do |branch|
+      options[:branch] = branch
+    end
+  end,
+  'finish' => OptionParser.new do |opts|
+    opts.banner = "Usage: ci-master bump [options]"
+
+    common_opts(opts, options)
+
+    opts.on("-bBRANCH", "--branch=BRANCH", String, "Branch to push to master") do |branch|
+      options[:branch] = branch
+    end
+  end,
+  'release' => OptionParser.new do |opts|
+    opts.banner = "Usage: ci-master do [options]"
+
+    common_opts(opts, options)
+
+    opts.on("-gGEMS_TMPL1,GEMS_TMPL2,GEMS_TMPLX", "--gems=GEMS_TMPL1,GEMS_TMPL2,GEMS_TMPLX", Array, "Gems to release") do |gems|
+      options[:gems] = gems
+    end
+
+    opts.on("-vVERSION", "--version=VERSION", String, "Version part to increment, accepted values: major|minor|patch|pre|release|1.2.3") do |version|
+      options[:version] = version
+    end
+  end
+}
+
+global.order!
+command = ARGV.shift
+subcommands[command].order!
+
+begin
+  Lapidist::Cli::Command.new.send(command.gsub('-', '_'), options)
+  exit 0
+rescue => e
+  puts "Error: #{e.message}"
+  exit 1
+end
