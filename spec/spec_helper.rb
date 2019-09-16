@@ -1,5 +1,6 @@
 require "bundler/setup"
-require "lapidist"
+require "lapidist/cli/command"
+require "support/console_helper"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +12,20 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include Metanorma::ConsoleHelper
+end
+
+def create_gems_playground(path, gems, max_deps=0)
+  FileUtils.mkdir_p path
+  Dir.chdir path do
+  	gems.each { |g|
+      `gem gemspec #{g}`
+      `git -C #{g} init`
+    }
+  end
+end
+
+def clean_gems_playground(path)
+  FileUtils.rm_rf(path)
 end

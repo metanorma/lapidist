@@ -39,67 +39,72 @@ release repository:: git repository or directory used for the releasing process
 ** creation of PRs across gems
 ** synchronized release of gems
 
+== Flow
 
-== Usage
+All starts with `start` subcommand
 
-=== Flow
+. Go to this `metanorma-release` repository
 
-This is a "`composite-git-flow`" kind of process.
-Maybe it's called `git gush` or `git cascade`.
+[source,sh]
+----
+bundle exec exe/mn-release start -p .. -b 'feature/some-feature' -g isodoc,metanorma-iso,metanorma,metanorma-cli
+----
 
-The typical scenario is:
+.. -p - path to `.gitmodules` file
+.. -b - branch name for feature, the same name will be used across all gems
+.. -g - comaseparated list of gems which will be included in feature (if missed default all gems included)
 
-. A leaf gem needs enhancing
+Finally this command will ask you to push changes to remote
 
-. A leaf gem requires a dependent gem to be updated
-
-. A dependent gem update means the testing on all its downstream gems needs to be updated
-
-This is how the release flow looks like.
-
-
-
-=== Create a repository with all gem sources
-
-For example, the https://github.com/metanorma/metanorma-release[`metanorma-release` repository]
-is a Lapidist-compatible release repository.
-
-It contains the source code for all gems in the Metanorma "`gem net`",
-each separated into its own directory at the root-level.
-
+Under hood this command:
+ - use `bundler` to set local path to gems
+ - generate `Gemfile.devel` to keep CI 'green'
 
 === Updating code and integrated testing
 
-. Go to the release repository
+. Go to this `metanorma-release` repository
 
-. Run a command to create feature branches in all gems. (TODO: what is the command?)
+. If you have missed some gem you can run `mn-release start ...` for it separatelly but keep branch name the same
 
-. Do the necessary work in the gem source code directory. (e.g. `isodoc` and `metanorma-iso`)
+. Do the necessary work in the submodule'd (in this repo) i.e. `isodoc` or `metanorma-iso`
 
-. Run a script that performs tests on all the gems at once using the newly created feature branches (TODO: what is the command?)
+. Run a script that performs tests on all the gems at once using the newly created feature branches
 
-.. (alt) if you want Travis to test for you, push the release repository, and Travis will build for you. (assuming the release repository is git managed and/or submoduled, like `metanorma-release`)
+[source,sh]
+----
+bundle exec exe/mn-release rake -p .. -b 'feature/some-feature'
+----
 
-. When all the gems pass, run a script to make PRs to every repository. (TODO: what is the command?)
+.. (alt) if you want Travis to test for you, push submodules of the `metanorma-release` repository, and Travis will build for you
 
-.. If the feature branch for a gem is empty, the script will ignore it.
+. When all the gems pass locally, create PRs for 'feature/some-feature' -> 'master'
 
-. Merge PRs by hand or by script (into master or a release branch) (TODO: what is the command?)
+. Before merge finish feature with:
+
+[source,sh]
+----
+bundle exec exe/mn-release finish -p .. -b 'feature/some-feature'
+----
+
+.. (alt) this will lead for short time breaks on CI till gems will be actually released
+
+. Merge PRs by hand or by script (into master or a release branch)
 
 
 === Releasing
 
-. When a release branch is ready (for all gems), run a script to: (TODO: what is the command?)
-.. Bump version of those gems (`VERSION` variable in code)
-.. Update the ``Gemfile``s (remove feature branches)
-.. Update ``gemspec``s to lock versions
-
-. Issue PRs for those gems to merge their release branches into `master`. (TODO: what is the command?)
-
-. Merge the release PRs by hand or by script. (TODO: what is the command?)
+. When all PRs merged, run a script to:
+.. Update ``gemspec``s dependencies version of recently released gems
+.. Run `bundle exec exe/mn-release release -p .. -v patch -g isodoc,metanorma-iso,metanorma,metanorma-cli` to release passed gems
+.. Release command will do:
+... version bump
+... commit bump
+... do tag
+... push tag to git
+... build gem
+... release gem to rubygems.org
 
 Ideally, we want to update the base gems first, then the immediately dependent gems, and so forth to ensure that the builds always pass.
-
 
 
 == Installation
