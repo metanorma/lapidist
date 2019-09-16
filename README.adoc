@@ -27,6 +27,10 @@ gem net:: a coherent set of gems that needs to interoperate and that requires sy
 caught gem:: gem under the release control of the releaser
 release repository:: git repository or directory used for the releasing process
 
+== Requirments
+
+ - https://hub.github.com/[hub] must be installed
+
 == Features
 
 . Integration testing

@@ -144,6 +144,10 @@ A typical flow will be:
    - CI is green for A, B, C, D, E gems
  - To do release with version bump simply run `Usage: mn-release release -g a,b,c,d,e -v minor`
 
+Dependencies
+
+ - https://hub.github.com/ must be installed
+
 Hints
 
  - All commands have --dry-run & --verbose modes, if you aren't sure about result of some command, try it with dry-run first
