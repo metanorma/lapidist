@@ -3,176 +3,129 @@ require "spec_helper"
 RSpec.describe Lapidist::Cli do
   it "test dry-run deny start" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[start -g #{all_gems.join(',')} --verbose -n -d -p #{path} -b feature/x]
     output = capture_stdout {
-      cmd.start({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        deny: true,
-        dry_run: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
     expect(output).to include("run system")
 
-    clean_gems_playground gems_paths
+    clean_gems_playground path
   end
 
   it "test dry-run silent start" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[start -g "#{all_gems.join(',')}" -p #{path} -d --verbose -b feature/x]
     output = capture_stdout {
-      cmd.start({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        silent: true,
-        dry_run: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run rake" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[rake -g "#{all_gems.join(',')}" -p #{path} -d -b feature/x]
     output = capture_stdout {
-      cmd.rake({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        dry_run: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run deny push" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[push -g "#{all_gems.join(',')}" -p #{path} -b feature/x -d -n]
     output = capture_stdout {
-      cmd.push({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        dry_run: true,
-        deny: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run silent push" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[push -g "#{all_gems.join(',')}" -p #{path} -b feature/x -d -y]
     output = capture_stdout {
-      cmd.push({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        dry_run: true,
-        silent: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run finish" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[finish -g "#{all_gems.join(',')}" -p #{path} -b feature/x -d -y]
     output = capture_stdout {
-      cmd.finish({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        dry_run: true,
-        silent: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run deny finish" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[finish -g "#{all_gems.join(',')}" -p #{path} -b feature/x -n]
     output = capture_stdout {
-      cmd.finish({
-        gems: all_gems,
-        gems_path: gems_paths,
-        branch: 'feature/x',
-        verbose: false,
-        deny: true
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 
   it "test dry-run release" do
     all_gems = ['a', 'b', 'c', 'd', 'e']
-    gems_paths = 'tmp'
+    path = 'tmp'
 
-    create_gems_playground gems_paths, all_gems
+    create_gems_playground path, all_gems
 
-    cmd = Lapidist::Cli::Command.new
-
+    command = %W[release -g "#{all_gems.join(',')}" -p #{path} -b feature/x -d]
     output = capture_stdout {
-      cmd.release({
-        gems: all_gems,
-        gems_path: gems_paths,
-        version: 'patch',
-        verbose: false,
-        dry_run: true,
-      })
+      Lapidist::Cli::Command.start(command)
     }
 
-    clean_gems_playground gems_paths
+    # TODO Add validation
+
+    clean_gems_playground path
   end
 end
