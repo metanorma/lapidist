@@ -119,6 +119,8 @@ BANNER
             end
           end
         end
+
+        Lapidist.log("feature branch [#{branch_name}] for #{gems} gems was started", options)
       end
 
       desc "rake", "Test gems of feature"
@@ -144,6 +146,8 @@ BANNER
             end
           end
         end
+
+        Lapidist.log("tests for branch [#{branch_name}] gems #{gems} was executed", options)
       end
 
       desc "push", "Push commits for gems of feature"
@@ -151,7 +155,7 @@ BANNER
       def push
         path = options[:path]
         branch_name = options[:branch]
-        gems = options[:gems] || Lapidist.gems(path, branch_name)
+        gems = options[:gems].split(',') || Lapidist.gems(path, branch_name)
 
         Lapidist.log("start push for branch [#{branch_name}]", options)
 
@@ -169,6 +173,8 @@ BANNER
             end
           end
         end
+
+        Lapidist.log("push for branch [#{branch_name}] was executed", options)
       end
 
       desc "finish", "Merge PRs for gems into master"
@@ -211,6 +217,8 @@ BANNER
         else
           Lapidist.warn "please fix all issues before finish [#{branch_name}] branch", options
         end
+
+        Lapidist.log("finish for branch [#{branch_name}] was executed", options)
       end
 
       desc "release", "Bump version & push to git & rubygems.org"
@@ -235,6 +243,8 @@ BANNER
             end
           end
         }
+
+        Lapidist.log("release for gems [#{gems}] was executed", options)
       end
     end
   end

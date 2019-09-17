@@ -71,6 +71,6 @@ module Lapidist
   end
 
   def self.git_branch_is(branch_name, repo_path = '.')
-    `git -C #{repo_path} branch --show-current`.strip == branch_name
+    `git -C #{repo_path} symbolic-ref --short HEAD`.strip == branch_name
   end
 end
