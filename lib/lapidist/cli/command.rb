@@ -96,7 +96,7 @@ BANNER
           Dir.chdir(gem_project_path) do
             File.open(Lapidist::DEVEL_GEMFILE, 'w') { |file| 
               gem_deps[g.to_s].each do |d|
-                file.write("gem '#{d}', #{gem_repo_path_with_opts(d, options[:org])}, :branch => '#{branch_name}'\n")
+                file.write("gem '#{d}', #{Lapidist::gem_repo_path_with_opts(d, options[:org])}, :branch => '#{branch_name}'\n")
               end
             }
 

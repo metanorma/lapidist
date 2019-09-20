@@ -29,7 +29,7 @@ module Lapidist
         gemspec_path = File.join(path, g, "#{g}.gemspec")
         deps = File.open(File.join(path, g, "#{g}.gemspec"), 'r:UTF-8').each_line.map { |line|
           line.match(/add_(development_|runtime_)?dependency\s+.([\w_-]+)/)
-        }.compact.map { |m| m[2]}.keep_if { |d| gems.include?(d) && keep_gems.include?(d) }.uniq
+        }.compact.map { |m| m[2]}.keep_if { |d| gems.include?(d) }.uniq
       rescue Errno::ENOENT => e
         self.warn "gemspec #{gemspec_path} not found for #{g} gem"
       end
