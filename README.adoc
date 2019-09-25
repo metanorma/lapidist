@@ -84,8 +84,14 @@ NOTE: If you have missed some gem, you can run `lapidist start ...` for it separ
 ----
 lapidist rake -p .. -b 'feature/some-feature'
 ----
+--
 
-NOTE: If you want Travis to test for you, push submodules of the release repository, and Travis will build for you.
+.  If you want Travis and Appveyor to test for you, and/or if you want to create PRs, run a script that pushes gems with the feature branches:
+--
+[source,sh]
+----
+lapidist push -p .. -b 'feature/some-feature'
+----
 --
 
 . When all the gems pass locally, create PRs for `feature/some-feature` -> `master`
@@ -102,13 +108,27 @@ lapidist finish -p .. -b 'feature/some-feature'
 
 . Merge PRs by hand or by script (into `master` or a release branch)
 
-. Re-run tests against `master` (or release) branch to ensure integration of PRs has not introduced problems.
-
-
-
 === Releasing
 
+
 When all PRs merged, run a script to:
+
+. Re-run tests against `master` (or release) branch to ensure integration of PRs has not introduced problems,
+and that any external gem releases you are not responsible for have been taken into account (e.g. metanorma stack
+depending on relaton stack). This test set will involve a new integration testing branch, forked from master
+(or release):
+
+[source,sh]
+----
+lapidist start -p .. -b 'test/date' -g isodoc,metanorma-iso,metanorma,metanorma-cli
+lapidist rake -p .. -b 'test/date'
+lapidist push -p .. -b 'test/date'
+lapidist finish -p .. -b 'test/date'
+----
+
+Any needed fixes will be against this new integration testing branch, and would trigger new PRs.
+
+Once integration testing is done, run a script to:
 
 . Update ``gemspec``s dependencies version of recently released gems
 
