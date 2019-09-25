@@ -19,9 +19,9 @@ gems. It provides methods to:
 
 == Terms and definitions
 
-leaf gem:: a gem that is no other software is dependent on
+root gem:: a gem that is no other software is dependent on
 dependent gem:: a gem that other gems depend on
-root gem:: a gem that does not depend on any other gem in the defined gem web
+leaf gem:: a gem that does not depend on any other gem in the defined gem web
 gem net:: a coherent set of gems that needs to interoperate and that requires synchronized releasing
 caught gem:: gem under the release control of the releaser
 release repository:: git repository or directory used for the releasing process
@@ -102,6 +102,9 @@ lapidist finish -p .. -b 'feature/some-feature'
 
 . Merge PRs by hand or by script (into `master` or a release branch)
 
+. Re-run tests against `master` (or release) branch to ensure integration of PRs has not introduced problems.
+
+
 
 === Releasing
 
@@ -132,7 +135,7 @@ lapidist release -p .. -v patch -g isodoc,metanorma-iso,metanorma,metanorma-cli
 .. release gem to `rubygems.org`
 
 
-Ideally, we want to update the root gems first, then the immediately dependent gems, and so forth towards the leaf gems to ensure that the builds always pass.
+Ideally, we want to update the leaf gems first, then the immediately dependent gems, and so forth towards the root gems to ensure that the builds always pass.
 
 
 == Installation
