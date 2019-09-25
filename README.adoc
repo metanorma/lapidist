@@ -178,3 +178,5 @@ image::docs/diagrams/Slide3.png[]
 image::docs/diagrams/Slide4.png[]
 
 image::docs/diagrams/Slide5.png[]
+
+image::docs/diagrams/Slide6.png[]
