@@ -149,16 +149,32 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to https://rubygems.org[rubygems.org].
 
+
 == Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/metanorma/lapidist. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the http://contributor-covenant.org[Contributor Covenant] code of conduct.
 
+
 == Code of Conduct
 
 Everyone interacting in the Lapidist project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the https://github.com/metanorma/lapidist/blob/master/CODE_OF_CONDUCT.md[code of conduct].
+
 
 == Origin of the name
 
 A "`lapidist`" is someone who cuts, polishes, or engraves gems. Geddit?
 
 NOTE: The noun form of "`lapidary`" is now more popular than "`lapidist`" in this meaning, but the current usage also conflates the "`person`" ("`the lapidary`"), and the relation to gem processing ("`a lapidary engraving`").
+
+
+== Release flow diagrams
+
+image::docs/diagrams/Slide1.png[]
+
+image::docs/diagrams/Slide2.png[]
+
+image::docs/diagrams/Slide3.png[]
+
+image::docs/diagrams/Slide4.png[]
+
+image::docs/diagrams/Slide5.png[]
