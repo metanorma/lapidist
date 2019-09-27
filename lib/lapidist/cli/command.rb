@@ -139,7 +139,8 @@ BANNER
             if Lapidist.git_branch_is(branch_name) && gems.include?(g)
               Lapidist.log("run tests for [#{g}] gem...", options)
               Bundler.with_clean_env do
-                Lapidist.run_cmd("bundle exec rake", options)
+                #Lapidist.run_cmd("bundle exec rake", options)
+                Lapidist.run_cmd("bundle exec rspec --format doc", options)
               end
             else
               Lapidist.log("ignore tests for [#{g}] gem because branch isn't [#{branch_name}]", options)

@@ -25,6 +25,7 @@ module Lapidist
   def self.gem_deps(path, gems)
     @gem_deps ||= gems.map { |g|
       deps = []
+      warn g
       gemspec_path = (Pathname.new(path) / g).glob("*.gemspec").first
 
       if gemspec_path.exist?
