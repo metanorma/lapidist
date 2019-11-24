@@ -48,7 +48,10 @@ module Lapidist
     end
 
     if !options[:dry_run]
-      system(cmd, chdir: Dir.pwd)
+      IO.popen(cmd, "r+", external_encoding: "UTF-8") do |io|
+        io.close_write
+        puts io.read
+      end
     end
   end
 
@@ -70,6 +73,14 @@ module Lapidist
 
   def self.gem_repo_path_with_opts(gemname, org)
     ":github => '#{org}/#{gemname}'"
+  end
+
+  def self.gem_git_remote_source(remote)
+    ":git => '#{remote}'"
+  end
+
+  def self.repo_path
+    `git -C #{repo_path} config --get remote.origin.url`
   end
 
   def self.git_branch_is(branch_name, repo_path = '.')
