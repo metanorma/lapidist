@@ -10,7 +10,7 @@ module Lapidist
     if File.exist?(path)
       @gems ||= Pathname.new(path).children
         .select { |child|
-          child.directory? && (child + ".git").directory? && !child.glob("*.gemspec").empty?
+          child.directory? && (child + ".git").directory? && !Dir[(child / "*.gemspec").to_s].empty?
         }
         .select { |child|
           true if branch_name.nil?
@@ -26,7 +26,7 @@ module Lapidist
     @gem_deps ||= gems.map { |g|
       deps = []
       warn g
-      gemspec_path = (Pathname.new(path) / g).glob("*.gemspec").first
+      gemspec_path = Pathname.new Dir[(Pathname.new(path) / g / "*.gemspec").to_s].first
 
       if gemspec_path.exist?
         deps = File.open(gemspec_path, 'r:UTF-8').each_line.map { |line|
