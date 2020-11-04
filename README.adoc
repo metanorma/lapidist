@@ -1,5 +1,7 @@
 = Lapidist: synchronized gem releases
 
+image:https://github.com/metanorma/metanorma-iso/workflows/rake/badge.svg["tests", link="https://github.com/metanorma/metanorma-iso/actions?workflow=rake"]
+
 == Scope
 
 Certain projects are dependent on the interoperability of a web of gems.
