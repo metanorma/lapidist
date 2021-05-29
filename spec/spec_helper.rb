@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "lapidist/cli/command"
 require "support/console_helper"
+require "fileutils"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
